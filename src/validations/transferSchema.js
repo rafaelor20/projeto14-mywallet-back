@@ -5,7 +5,7 @@ const joi = coreJoi.extend(joiDate) //as typeof coreJoi;
 
 export const transferSchema = joi.object({
     name: joi.string().required(),
-    date: joi.date().format("DD:MM").required(),
+    date: joi.date().format("DD/MM").required(),
     value: joi.number().required(),
     description: joi.string().required(),
 })
