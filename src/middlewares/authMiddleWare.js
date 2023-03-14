@@ -9,7 +9,7 @@ export async function authValidation(req, res, next) {
   try {
     const checkSession = await db.collection("sessoes").findOne({ token })
 
-    if (!checkSession) return res.status(401).send("Você não tem autorização para cadastrar uma receita")
+    if (!checkSession) return res.status(401).send("Você não tem autorização")
 
     res.locals.sessao = checkSession
 

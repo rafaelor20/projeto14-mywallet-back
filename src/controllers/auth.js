@@ -3,10 +3,15 @@ import { v4 as uuidV4 } from 'uuid'
 import db from "../database.js"
 
 export async function signUp(req, res) {
-  const { name, email, password, transfers } = req.body;
+  const { name, email, password } = req.body;
+  const transfers = []
   const passwordHashed = bcrypt.hashSync(password, 10);
 
   try {
+    const checkEmail = await db.collection('users').findOne({ email })
+    if (checkEmail !== null){
+      return res.status(400).send("email já cadastrado")
+    }
     await db.collection("users").insertOne({ name, email, password: passwordHashed, transfers })
     res.status(201).send("Usuário cadastrado com sucesso!")
 
@@ -28,7 +33,6 @@ export async function signIn(req, res) {
 
     if (!isCorrectPassword) return res.status(400).send("Usuário ou senha incorretos")
 
-    console.log(checkUser)
     const token = uuidV4();
     const login = {name: checkUser.name, token: token}
     await db.collection("sessoes").insertOne({ idUsuario: checkUser._id, token })
